@@ -25,6 +25,43 @@ describe('/readers', () => {
         expect(newReaderRecord.email).to.equal('future_ms_darcy@gmail.com');
         expect(newReaderRecord.password).to.equal('secretpassword'); 
       });
+      it('sends a 400 error if any of the reader details are missing', async() => {
+        const response = await request(app).post('/readers').send({
+          name: 'Elizabeth Bennet',
+          email: 'future_ms_darcy1@gmail.com',
+        });
+        expect(response.status).to.equal(400);
+        expect(response.body.error).to.equal('Password required!')
+      });
+      it('sends a 400 error if reader email is not unique', async() => {
+        const response = await request(app).post('/readers').send({
+          name: 'Elizabeth Bennet',
+          email: 'future_ms_darcy@gmail.com',
+          password: 'superextrasecret',
+      });
+        expect(response.status).to.equal(400);
+        expect(response.body.error).to.equal('Email passwords must be unique.');
+
+      it('sends a 400 error if reader email is not in the correct format', async() =>{
+        const response = await request(app).post('/readers').send({
+          name: 'Lizzie Bennet',
+          email: 'future_ms_darcy.com',
+          password: 'superduperextrasecret',
+      });
+        expect(response.status).to.equal(400);
+        expect(response.body.error).to.equal('Invalid email address! Please use a real email address.');
+
+      });
+      it('sends a 400 error if reader password is longer than 8 characters', async() =>{
+        const response = await request(app).post('/readers').send({
+          name: 'Lizzie Bennet',
+          email: 'future_ms_darcy@yahoo.com',
+          password: 'sdp',
+      });
+        expect(response.status).to.equal(400);
+        expect(response.body.error).to.equal('Invalid password! Passwords should be at least 8 characters long.');
+      })
+    
     });
   });
 
@@ -119,4 +156,5 @@ describe('/readers', () => {
       });
     });
   });
+});
 });
