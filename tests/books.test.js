@@ -22,7 +22,7 @@ describe('/books', () => {
 
         expect(response.status).to.equal(201);
         expect(response.body.title).to.equal('Pride and Prejudice');
-        expect(newBookRecord.title).to.equal('Elizabeth Bennet');
+        expect(newBookRecord.title).to.equal('Pride and Prejudice');
         expect(newBookRecord.author).to.equal('Jane Austen');
         expect(newBookRecord.genre).to.equal('romantic comedy');
         expect(newBookRecord.ISBN).to.equal('1522766987'); 
